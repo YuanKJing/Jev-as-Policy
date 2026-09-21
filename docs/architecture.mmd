@@ -1,0 +1,8 @@
+flowchart LR
+  A[MuJoCo state] --> B[Harness: geometry + contacts]
+  B --> C[Jev call 1: intent Choice]
+  C --> D[Fresh observation]
+  D --> E[Jev call 2: XYZ + fingers Choices]
+  E --> F[Cartesian target + DLS IK]
+  F --> G[Continuous MuJoCo servo]
+  G --> A

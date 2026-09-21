@@ -1,0 +1,7 @@
+mujoco==3.3.7
+typesafe-sdk==0.6.0
+numpy==2.5.3
+Pillow==12.3.0
+fastapi==0.141.1
+uvicorn==0.53.0
+msgspec==0.21.1
