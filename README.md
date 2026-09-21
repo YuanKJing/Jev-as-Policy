@@ -35,6 +35,58 @@ The first request chooses `approach`, `grasp`, `lift`, `carry`, `lower`, `releas
 
 The API key stays outside the repository. Jev is served remotely by TypeSafe; no Jev weights are downloaded to the simulation machine.
 
+## Jev input and output contract
+
+The harness sends Jev a compact text/JSON state derived from MuJoCo. It does not send images, meshes, raw simulator objects, or joint trajectories. Each policy update uses two dependent TypeSafe calls.
+
+The first call selects the manipulation intent:
+
+```json
+{
+  "task": "Grasp the orange wooden cube, lift it above the blue barrier, carry it to the tan pad, release it, and withdraw.",
+  "observed_facts": {
+    "cube_held_by_both_fingers": false,
+    "cube_resting_on_goal": false,
+    "gripper_horizontally_aligned_with_cube": false,
+    "cube_horizontally_aligned_with_goal": false,
+    "cube_at_carrying_height": false,
+    "fingers_open": true,
+    "gripper_at_grasp_height": false,
+    "gripper_withdrawn": true,
+    "cube_contacts": ["world"]
+  },
+  "previous_intent": null,
+  "object_height_m": 0.025
+}
+```
+
+The `intent` Choice contains `approach`, `grasp`, `lift`, `carry`, `lower`, `release`, `withdraw`, and `finish`. A response contains a selected label, probabilities, and confidence:
+
+```json
+{
+  "answers": {
+    "intent": {
+      "choice": "approach",
+      "probabilities": {"approach": 0.88, "grasp": 0.12},
+      "confidence": 0.84
+    }
+  }
+}
+```
+
+The harness then reads MuJoCo again and builds the second state from the selected intent, current contact facts, the target direction, and the target offset. The second call asks four independent Choice questions:
+
+```text
+x       ∈ {positive, negative, stay}
+y       ∈ {positive, negative, stay}
+z       ∈ {positive, negative, stay}
+fingers ∈ {open, close, stay}
+```
+
+For example, Jev may return `x=negative`, `y=positive`, `z=stay`, and `fingers=close`, with a probability distribution and confidence for each answer. Jev does not return joint angles, Cartesian coordinates, force commands, or a complete trajectory. The local harness maps these labels to a Cartesian target, DLS IK, filtered joint targets, and MuJoCo physics.
+
+In this design, Jev is the semantic decision layer; the harness owns geometry, timing, IK, contact dynamics, and execution.
+
 ## Quick start
 
 Python 3.12 is the tested baseline. A Linux machine with an EGL-capable GPU is recommended for the live panel and high-resolution video export. CPU rendering can work after changing `MUJOCO_GL` in `start.sh`.
