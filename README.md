@@ -178,9 +178,7 @@ GET  /replay.mp4   latest panel recording
 
 ## Reproducibility notes
 
-The public post describes the two-stage mechanism but does not publish the author's complete prompt, scene, controller, or private code. This repository is a transparent implementation of that mechanism, not a claim that the private original source has been recovered. See [`docs/provenance.md`](docs/provenance.md) for source and license details.
-
-The scene is simulation-only. It does not import PiPER, CAN, RealSense, xpolicy, or any real-robot driver. Replacing MuJoCo truth with real perception and robot state is a separate integration task.
+The repository includes tasks from Dmytro Hrybov, with some harness-related processing and other modifications. We will also release the Astra + JEV evaluation results in a follow-up.
 
 ## License
 
