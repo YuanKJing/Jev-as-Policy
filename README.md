@@ -1,9 +1,7 @@
 # Jev as Policy · MuJoCo Studio
 
 <p align="center">
-  <video src="media/jev-carry-block-1080p60.mp4" autoplay loop muted playsinline controls width="100%">
-    <a href="media/jev-carry-block-1080p60.mp4">Watch the Jev MuJoCo panel demo</a>
-  </video>
+  <img src="media/jev-carry-block.png" alt="Jev as Policy MuJoCo panel" width="100%">
 </p>
 
 <p align="center"><b>Text state → Jev intent → Jev motor choices → local IK → MuJoCo</b></p>
